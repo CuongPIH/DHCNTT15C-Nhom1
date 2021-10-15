@@ -1,29 +1,27 @@
 package TCPSocket;
-import java.io.*;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class TCPClient {
-    public final static String serverIP = "127.0.0.3";
-    public final static int serverPort = 7;
-    public static void main(String[] args) throws InterruptedException, IOException {
-        Socket s = null;
+    public static void main(String[] args) throws InterruptedException {
         try {
-            s= new Socket(serverIP, serverPort);
-            System.out.println("CLIENT Da Duoc Tao");
+            Socket s = new Socket("127.0.0.1", 6789);
+            System.out.println("CLIENT DA~ DUOC TAO");
+
             InputStream is = s.getInputStream();
             OutputStream os = s.getOutputStream();
-            for (int i = '0'; i <= '9'; i++){
+            for (int i = '0'; i <= '9'; i++) {
                 os.write(i);
                 int ch = is.read();
                 System.out.println((char) ch);
                 Thread.sleep(2000);
             }
-        } catch (IOException ie) {
-            System.out.println("Error: Can NOT create socket");
-        }finally{
-            if(s != null){
-                s.close();
-            }
+            s.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

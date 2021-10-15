@@ -6,27 +6,20 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class TCPServer {
+public class TCPServerSS {
     public static void main(String[] args) {
         ServerSocket ss;
         try {
             ss = new ServerSocket(6789);
-            System.out.println("SERVER DA~ DUOC TAO");
+            System.out.println("SERVER song song DA~ DUOC TAO");
             while (true) {
                 Socket s = ss.accept();
-                InputStream is = s.getInputStream();
-                OutputStream os = s.getOutputStream();
-                while (true) {
-                    int ch = is.read();
-                    System.out.println((char) ch);
-                    if (ch == -1)
-                        break;
-                    os.write(ch);
-                }
+                 Xuly p = new Xuly(s);
+                p.start();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
-} 
+}
