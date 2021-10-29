@@ -1,7 +1,5 @@
 package Bai07;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -9,34 +7,35 @@ import java.util.Scanner;
 
 public class Client {
     public static void main(String[] args) {
-        try{
-            DatagramSocket s = new DatagramSocket();
-            String str;
+        
+        try {
+            DatagramSocket socket = new DatagramSocket();     
             Scanner sc = new Scanner(System.in);
-            do{
-                System.out.println("----------Menu----------");
-                System.out.println("Chọn chức năng:");
-                System.out.println("1. Time");
-                System.out.println("2. Date");
-                System.out.println("3.Date time");
-                System.out.println("0. Exit");
-                InputStreamReader is = new InputStreamReader(System.in);
-                BufferedReader br = new BufferedReader(is);
-                System.out.println("lựa chọn: ");
-                str = br.readLine();
-                byte data[] = str.getBytes();
-                DatagramPacket pkt = new DatagramPacket(data, data.length, InetAddress.getByName("localhost"), 7777);
-                s.send(pkt);
+            InetAddress host = InetAddress.getByName("127.0.0.1");
+            int port = 7777;
+            System.out.println("Nhap file name (Max = 12 ki tu): ");
+            String fileName = sc.nextLine();
+            while(true){ 
 
-                byte[] arr = new byte[6000];
-                DatagramPacket nhan = new DatagramPacket(arr, arr.length);
-                s.receive(nhan);
-                String fromServer = new String(nhan.getData(), 0, nhan.getLength());
-                System.out.println("Server trả về >>" + fromServer);
+                System.out.println("Noi dung gui SERVER : ");
+                String outputStr_ND = sc.nextLine();
+                String outputStr = fileName + ".txt " + outputStr_ND;
+                
+                byte[] outputByte = outputStr.getBytes();
+                DatagramPacket outputPack = new DatagramPacket(outputByte, outputByte.length,host, port);
+                socket.send(outputPack);
+                
+                if(outputStr_ND.equals("bye")) break;
 
-            }while(str != "0");
-        }catch(Exception e){
+                byte[] inputByte = new byte[6000];
+                DatagramPacket inputPack = new DatagramPacket(inputByte, inputByte.length);
+                socket.receive(inputPack);
+                String inputStr = new String(inputPack.getData(), 0, inputPack.getLength());
+                System.out.println("Server gui lai :  " + inputStr);
+            }
+            socket.close();
             
+        } catch (Exception e) {
         }
     }
 }
